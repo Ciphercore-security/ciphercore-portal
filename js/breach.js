@@ -1,16 +1,19 @@
 // =========================================================
 // CipherCore — Breach Console
 // Simulated attacker view. Client-side only.
+// Passwords hidden until cracked. Includes weak / medium / strong.
 // =========================================================
 
 (function () {
 
   const accounts = [
-    { name: 'Thabo Mokoena',  email: 'thabo.m@company.co.za',  password: 'password123' },
-    { name: 'Sarah van Wyk',  email: 'sarah.vw@company.co.za', password: 'Summer2024!' },
-    { name: 'Sipho Dlamini',  email: 'sipho.d@company.co.za',  password: 'qwerty' },
-    { name: 'Naledi Khumalo', email: 'naledi.k@company.co.za', password: 'Company@123' },
-    { name: 'Ryan Botha',     email: 'ryan.b@company.co.za',   password: 'L3tm3in!' }
+    { name: 'Thabo Mokoena',   email: 'thabo.m@company.co.za',   password: 'password123',  level: 'weak' },
+    { name: 'Sarah van Wyk',   email: 'sarah.vw@company.co.za',  password: 'Summer2024!',  level: 'weak' },
+    { name: 'Sipho Dlamini',   email: 'sipho.d@company.co.za',   password: 'qwerty',       level: 'weak' },
+    { name: 'Naledi Khumalo',  email: 'naledi.k@company.co.za',  password: 'Company@123',  level: 'medium' },
+    { name: 'Ryan Botha',      email: 'ryan.b@company.co.za',    password: 'L3tm3in!',     level: 'medium' },
+    { name: 'Zanele Mthembu',  email: 'zanele.m@company.co.za',  password: 'correct horse battery staple', level: 'strong' },
+    { name: 'Kabelo Ndlovu',   email: 'kabelo.n@company.co.za',  password: 'T7$kQ!9pLm#42vZx',              level: 'strong' }
   ];
 
   const GUESSES_PER_SECOND = 1e9;
@@ -29,13 +32,21 @@
     return 'longer than the age of the universe';
   }
 
-  function estimate(pw) {
+  function estimate(pw, level) {
+    if (level === 'strong') {
+      return {
+        cracked: false,
+        time: 1e15,
+        note: 'Not found in any wordlist. Would take centuries at billions of guesses per second.'
+      };
+    }
+
     const lower = pw.toLowerCase();
     const common = ['password','password1','password123','123456','12345678','qwerty','abc123','letmein','welcome','admin','admin123','iloveyou','monkey','dragon','login','passw0rd','p@ssw0rd','qwerty123'];
 
-    if (common.includes(lower)) return { time: 0.001, note: 'Found instantly in the top-1000 passwords list.' };
-    if (/^[a-z]+\d{2,4}[!@#$%^&*]?$/i.test(pw)) return { time: 0.5, note: 'Dictionary word + numbers pattern. Crackers try this first.' };
-    if (pw.length < 8) return { time: 0.01, note: 'Too short. Every character matters.' };
+    if (common.includes(lower)) return { cracked: true, time: 0.001, note: 'Found instantly in the top-1000 passwords list.' };
+    if (/^[a-z]+\d{2,4}[!@#$%^&*]?$/i.test(pw)) return { cracked: true, time: 0.5, note: 'Dictionary word + numbers pattern. Crackers try this first.' };
+    if (pw.length < 8) return { cracked: true, time: 0.01, note: 'Too short. Every character matters.' };
 
     let charset = 0;
     if (/[a-z]/.test(pw)) charset += 26;
@@ -45,9 +56,11 @@
     charset = charset || 1;
 
     const seconds = Math.pow(charset, pw.length) / GUESSES_PER_SECOND / 2;
-    let note = 'Longer than most, but still within reach of a determined attacker.';
-    if (seconds > 31536000 * 100) note = 'Strong. Keep it unique — never reuse it.';
-    return { time: seconds, note: note };
+    const cracked = seconds < 86400 * 30;
+    let note = cracked
+      ? 'Longer than most, but still within reach of a determined attacker.'
+      : 'Would take a very long time with current hardware.';
+    return { cracked: cracked, time: seconds, note: note };
   }
 
   const terminal = document.getElementById('breach-terminal');
@@ -68,7 +81,7 @@
     head.innerHTML =
       '<div>Full name</div>' +
       '<div>Email</div>' +
-      '<div>Password (plaintext)</div>' +
+      '<div>Password</div>' +
       '<div>Status</div>' +
       '<div></div>';
     table.appendChild(head);
@@ -79,9 +92,9 @@
       row.innerHTML =
         '<div class="breach-cell breach-name">' + acct.name + '</div>' +
         '<div class="breach-cell breach-email">' + acct.email + '</div>' +
-        '<div class="breach-cell"><span class="breach-pw">' + acct.password + '</span></div>' +
+        '<div class="breach-cell"><span class="breach-pw hidden-pw" id="pw-' + i + '">••••••••••</span></div>' +
         '<div class="breach-cell label">exposed</div>' +
-        '<button class="breach-crack" data-crack="' + i + '">⚡ Crack</button>' +
+        '<button class="breach-crack" data-crack="' + i + '">⚡ Reveal &amp; Crack</button>' +
         '<div class="breach-result" id="bres-' + i + '"></div>';
       table.appendChild(row);
     });
@@ -89,19 +102,25 @@
     table.querySelectorAll('[data-crack]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const idx = btn.getAttribute('data-crack');
-        runCrack(accounts[idx].password, 'bres-' + idx, btn);
+        runCrack(accounts[idx], idx, btn);
       });
     });
   }
 
-  function runCrack(pw, targetId, btn) {
-    const target = document.getElementById(targetId);
-    if (!target) return;
+  function runCrack(acct, idx, btn) {
+    const pwEl = document.getElementById('pw-' + idx);
+    const target = document.getElementById('bres-' + idx);
+    if (!target || !pwEl) return;
+
+    // Reveal the password
+    pwEl.textContent = acct.password;
+    pwEl.classList.remove('hidden-pw');
+    pwEl.classList.add('revealed-pw');
 
     btn.disabled = true;
     btn.textContent = 'cracking…';
 
-    const info = estimate(pw);
+    const info = estimate(acct.password, acct.level);
 
     const stages = [
       'loading dictionary (14M entries)…',
@@ -109,14 +128,14 @@
       'trying word + number patterns…',
       'trying leetspeak variants…',
       'cross-referencing breach dumps…',
-      'match found.'
+      info.cracked ? 'match found.' : 'no match. continuing brute-force…'
     ];
 
-    const totalMs = info.time < 1 ? 1400 : 2200;
+    const totalMs = info.cracked ? 1600 : 2600;
     const stepMs = totalMs / stages.length;
 
-    target.innerHTML = '<span class="verdict">⚙ running…</span><span class="detail" id="crk-' + targetId + '">' + stages[0] + '</span>';
-    const log = document.getElementById('crk-' + targetId);
+    target.innerHTML = '<span class="verdict running">⚙ running…</span><span class="detail" id="crk-' + idx + '">' + stages[0] + '</span>';
+    const log = document.getElementById('crk-' + idx);
 
     let i = 0;
     const tick = setInterval(function () {
@@ -124,10 +143,19 @@
       if (i < stages.length) log.textContent = stages[i];
       if (i >= stages.length) {
         clearInterval(tick);
-        target.innerHTML =
-          '<span class="verdict">💥 CRACKED in ' + humanTime(info.time) + '</span>' +
-          '<span class="detail">' + info.note + '</span>';
-        btn.textContent = '✓ cracked';
+
+        if (info.cracked) {
+          target.innerHTML =
+            '<span class="verdict cracked">💥 CRACKED in ' + humanTime(info.time) + '</span>' +
+            '<span class="detail">' + info.note + '</span>';
+          btn.textContent = '✓ cracked';
+        } else {
+          target.innerHTML =
+            '<span class="verdict resisted">🛡 RESISTED — would take ' + humanTime(info.time) + '</span>' +
+            '<span class="detail">' + info.note + '</span>';
+          btn.textContent = '✓ resisted';
+          btn.classList.add('resisted-btn');
+        }
       }
     }, stepMs);
   }
