@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in to your account</title>
+  <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body class="ms-login-body">
+
+  <div class="training-banner">
+    <span class="dot"></span>
+    TRAINING ENVIRONMENT — Do not enter real credentials
+  </div>
+
+  <!-- Real-looking browser address bar -->
+  <div class="fake-urlbar">
+    <div class="fake-urlbar-controls">
+      <span class="dot-red"></span>
+      <span class="dot-yellow"></span>
+      <span class="dot-green"></span>
+    </div>
+    <div class="fake-urlbar-input">
+      <span class="lock-icon">🔒</span>
+      <span class="fake-url" id="fake-url">https://login.micros0ft-verify.com/oauth2</span>
+    </div>
+  </div>
+
+  <div class="ms-login-wrap">
+    <div class="ms-login-card">
+
+      <div class="ms-logo">
+        <div class="ms-logo-grid">
+          <span style="background:#f25022;"></span>
+          <span style="background:#7fba00;"></span>
+          <span style="background:#00a4ef;"></span>
+          <span style="background:#ffb900;"></span>
+        </div>
+        <span class="ms-logo-text">Microsoft</span>
+      </div>
+
+      <h1>Sign in</h1>
+      <p class="ms-sub">to continue to <strong>Microsoft 365</strong></p>
+
+      <form id="ms-login-form" autocomplete="off">
+        <input
+          type="email"
+          id="ms-email"
+          class="ms-input"
+          placeholder="Email, phone, or Skype"
+          required
+        >
+        <input
+          type="password"
+          id="ms-password"
+          class="ms-input"
+          placeholder="Password"
+          required
+        >
+
+        <div class="ms-row">
+          <label class="ms-checkbox">
+            <input type="checkbox"> Keep me signed in
+          </label>
+        </div>
+
+        <button type="submit" class="ms-signin-btn">Sign in</button>
+      </form>
+
+      <p class="ms-footer">
+        <a>Can't access your account?</a>
+      </p>
+    </div>
+
+    <div class="ms-links">
+      <a>Terms of use</a>
+      <a>Privacy &amp; cookies</a>
+      <span>…</span>
+    </div>
+  </div>
+
+  <script src="../../js/phish.js"></script>
+</body>
+</html>
