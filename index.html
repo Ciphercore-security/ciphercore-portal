@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherCore | Learner Portal — Sign In</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="login-body">
+
+  <div class="training-banner">
+    <span class="dot"></span>
+    TRAINING ENVIRONMENT — No real data is collected or stored
+  </div>
+
+  <main class="login-wrap">
+    <div class="login-card">
+
+      <div class="login-brand">
+        <span class="brand-mark">CC</span>
+        <div>
+          <strong>CipherCore</strong>
+          <small>Learner Portal</small>
+        </div>
+      </div>
+
+      <h1>Sign in to your portal</h1>
+      <p class="login-sub">Use any email and password — this is a training simulation.</p>
+
+      <form id="login-form" autocomplete="off">
+        <label>
+          Email address
+          <input type="email" id="email" placeholder="you@ciphercore.co.za" required>
+        </label>
+
+        <label>
+          Password
+          <input type="password" id="password" placeholder="Any password works" required>
+        </label>
+
+        <label class="role-label">
+          Sign in as
+          <select id="role">
+            <option value="student">Student</option>
+            <option value="employee">Employee</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+
+        <button type="submit" class="btn-primary">Sign in →</button>
+      </form>
+
+      <p class="login-note">
+        🔒 No password is stored, sent, or checked. This portal exists to teach
+        you what to look for — not to collect your credentials.
+      </p>
+    </div>
+  </main>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
