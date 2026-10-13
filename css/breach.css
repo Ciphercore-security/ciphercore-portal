@@ -1,35 +1,407 @@
-/* ---------- Hidden password state ---------- */
-.breach-pw.hidden-pw {
-  color: #5f6d66;
-  background: #0e1311;
-  border-color: #1f2a25;
+/* =========================================================
+   CipherCore — Breach Console (hacker-movie mode)
+   Neon, glowing, cinematic. Still client-side only.
+   ========================================================= */
+
+.breach-body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(0, 255, 156, 0.10), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(0, 200, 255, 0.08), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.05), transparent 60%),
+    #04070a;
+  color: #d4ffe4;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Faint grid overlay — the "hacker screen" feel */
+.breach-body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 156, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 156, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
+}
+
+/* Scanline sweep */
+.breach-body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 156, 0.06) 50%,
+    transparent 100%
+  );
+  height: 120px;
+  animation: scanSweep 8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scanSweep {
+  0% { transform: translateY(-120px); }
+  100% { transform: translateY(100vh); }
+}
+
+.breach-shell {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Terminal intro ---------- */
+.breach-terminal {
+  max-width: 700px;
+  width: 100%;
+  background: rgba(4, 12, 10, 0.85);
+  border: 1px solid rgba(0, 255, 156, 0.35);
+  border-radius: 12px;
+  padding: 28px 24px;
+  font-family: ui-monospace, 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13.5px;
+  line-height: 2;
+  color: #00ff9c;
+  box-shadow:
+    0 0 30px rgba(0, 255, 156, 0.15),
+    0 0 80px rgba(0, 255, 156, 0.08),
+    inset 0 0 40px rgba(0, 255, 156, 0.05);
+  backdrop-filter: blur(6px);
+  position: relative;
+}
+
+.breach-terminal::before {
+  content: '● ● ●';
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #ef4444;
+  opacity: 0.7;
+}
+
+.breach-terminal::after {
+  content: 'root@ciphercore:~#';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 10px;
+  color: #00ff9c;
+  opacity: 0.5;
+}
+
+.term-line {
+  opacity: 0;
+  animation: fadeIn 0.25s forwards;
+}
+.term-line:nth-child(1) { animation-delay: 0.1s; }
+.term-line:nth-child(2) { animation-delay: 0.7s; }
+.term-line:nth-child(3) { animation-delay: 1.3s; }
+.term-line:nth-child(4) { animation-delay: 1.7s; }
+.term-line:nth-child(5) { animation-delay: 2.1s; }
+.term-line:nth-child(6) { animation-delay: 2.4s; }
+.term-line:nth-child(7) { animation-delay: 2.6s; }
+.term-line:nth-child(8) { animation-delay: 2.9s; }
+
+.term-line .hl {
+  color: #00d4ff;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+.term-line.dim { color: #4b6b5c; }
+.term-line.ok {
+  color: #00ff9c;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 156, 0.6);
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ---------- Main console ---------- */
+.breach-console {
+  width: 100%;
+  max-width: 1100px;
+  background: rgba(4, 12, 10, 0.92);
+  border: 1px solid rgba(0, 255, 156, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 40px rgba(0, 255, 156, 0.15),
+    0 0 100px rgba(0, 255, 156, 0.06),
+    inset 0 0 60px rgba(0, 255, 156, 0.03);
+  backdrop-filter: blur(8px);
+  transition: opacity 0.4s ease;
+}
+.breach-console.hidden { display: none; }
+
+.breach-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 255, 156, 0.2);
+  background: linear-gradient(180deg, rgba(0, 255, 156, 0.05), transparent);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.breach-head-left { display: flex; align-items: center; gap: 14px; }
+
+.skull {
+  font-size: 26px;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.9));
+  animation: skullPulse 3s ease-in-out infinite;
+}
+@keyframes skullPulse {
+  0%, 100% { filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.9)); }
+  50%      { filter: drop-shadow(0 0 20px rgba(239, 68, 68, 1)); }
+}
+
+.breach-head strong {
+  display: block;
+  font-size: 15px;
+  color: #00ff9c;
+  font-family: ui-monospace, monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 156, 0.6);
+  letter-spacing: 0.02em;
+}
+.breach-head small { font-size: 12px; color: #7ba892; }
+
+.breach-head-right { display: flex; gap: 8px; align-items: center; }
+
+.pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  color: #00d4ff;
+  background: rgba(0, 212, 255, 0.08);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+  font-family: ui-monospace, monospace;
+}
+.pill.danger {
+  color: #ff4757;
+  border-color: rgba(255, 71, 87, 0.5);
+  background: rgba(255, 71, 87, 0.1);
+  text-shadow: 0 0 8px rgba(255, 71, 87, 0.7);
+  animation: dangerPulse 1.6s ease-in-out infinite;
+}
+@keyframes dangerPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 71, 87, 0.5); }
+  50%      { box-shadow: 0 0 16px rgba(255, 71, 87, 0.6); }
+}
+
+.breach-warning {
+  padding: 10px 24px;
+  font-size: 12.5px;
+  color: #ffd166;
+  background: linear-gradient(90deg, rgba(255, 209, 102, 0.08), rgba(255, 209, 102, 0.02));
+  border-bottom: 1px solid rgba(255, 209, 102, 0.15);
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------- Table ---------- */
+.breach-table { padding: 0; }
+
+.breach-col-head {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 1fr auto;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(0, 255, 156, 0.2);
+  background: rgba(0, 255, 156, 0.04);
+  font-size: 10.5px;
   letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00ff9c;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  text-shadow: 0 0 6px rgba(0, 255, 156, 0.4);
+}
+
+.breach-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 255, 156, 0.08);
+  font-size: 13.5px;
+  transition: background 0.2s;
+}
+.breach-row:hover {
+  background: rgba(0, 255, 156, 0.03);
+}
+.breach-row:last-child { border-bottom: none; }
+
+.breach-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.breach-cell.label {
+  color: #7ba892;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: ui-monospace, monospace;
+}
+.breach-name {
+  color: #ffffff;
+  font-weight: 600;
+}
+.breach-email {
+  color: #00d4ff;
+  font-size: 12.5px;
+  font-family: ui-monospace, monospace;
+  text-shadow: 0 0 6px rgba(0, 212, 255, 0.3);
+}
+
+/* Password hidden state */
+.breach-pw {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.breach-pw.hidden-pw {
+  color: #4b6b5c;
+  background: rgba(0, 255, 156, 0.04);
+  border: 1px solid rgba(0, 255, 156, 0.15);
+  letter-spacing: 0.25em;
   font-weight: 400;
 }
 
 .breach-pw.revealed-pw {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.35);
-  animation: revealFlash 0.6s ease;
+  color: #ff4757;
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.5);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.7);
+  animation: revealFlash 0.8s ease;
 }
 
 @keyframes revealFlash {
-  0%   { background: rgba(239, 68, 68, 0.6); color: #fff; }
-  100% { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
+  0%   { background: rgba(255, 71, 87, 0.9); color: #fff; box-shadow: 0 0 30px rgba(255, 71, 87, 0.9); }
+  100% { background: rgba(255, 71, 87, 0.12); color: #ff4757; box-shadow: 0 0 0 rgba(255, 71, 87, 0); }
 }
 
-/* ---------- Verdict colours ---------- */
-.breach-result .verdict.running { color: #fbbf24; }
-.breach-result .verdict.cracked { color: #ef4444; }
-.breach-result .verdict.resisted {
-  color: #4ade80;
-  text-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+/* Crack button */
+.breach-crack {
+  background: rgba(255, 71, 87, 0.06);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.5);
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(255, 71, 87, 0.5);
 }
-
-/* ---------- "Resisted" button state ---------- */
+.breach-crack:hover:not(:disabled) {
+  background: #ff4757;
+  color: #ffffff;
+  border-color: #ff4757;
+  box-shadow: 0 0 25px rgba(255, 71, 87, 0.7), 0 0 50px rgba(255, 71, 87, 0.3);
+  text-shadow: none;
+}
+.breach-crack:disabled {
+  cursor: default;
+  color: #00ff9c;
+  border-color: rgba(0, 255, 156, 0.4);
+  background: rgba(0, 255, 156, 0.06);
+  text-shadow: 0 0 8px rgba(0, 255, 156, 0.5);
+}
 .breach-crack.resisted-btn {
-  color: #4ade80;
-  border-color: rgba(74, 222, 128, 0.4);
-  background: rgba(74, 222, 128, 0.06);
+  color: #00ff9c;
+  border-color: rgba(0, 255, 156, 0.6);
+  background: rgba(0, 255, 156, 0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 156, 0.3);
+}
+
+/* Result area */
+.breach-result {
+  grid-column: 1 / -1;
+  font-size: 12.5px;
+  color: #7ba892;
+  padding: 6px 0 0;
+  font-family: ui-monospace, monospace;
+}
+.breach-result .verdict {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.breach-result .verdict.running {
+  color: #ffd166;
+  text-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+}
+.breach-result .verdict.cracked {
+  color: #ff4757;
+  text-shadow: 0 0 12px rgba(255, 71, 87, 0.7);
+  animation: verdictShake 0.5s ease;
+}
+.breach-result .verdict.resisted {
+  color: #00ff9c;
+  text-shadow: 0 0 14px rgba(0, 255, 156, 0.7);
+}
+.breach-result .detail { color: #7ba892; }
+
+@keyframes verdictShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* ---------- Footer ---------- */
+.breach-footer {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(0, 255, 156, 0.15);
+  background: rgba(0, 255, 156, 0.03);
+  font-size: 13px;
+  color: #a8d4bf;
+  line-height: 1.7;
+}
+.breach-footer .dim {
+  color: #4b6b5c;
+  margin-top: 8px;
+  font-size: 12px;
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .breach-row, .breach-col-head {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .breach-col-head { display: none; }
+  .breach-row { padding: 16px 20px; }
 }
