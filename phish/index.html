@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inbox (1) — Mail</title>
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body class="phish-body">
+
+  <div class="training-banner">
+    <span class="dot"></span>
+    TRAINING ENVIRONMENT — Do not enter real credentials
+  </div>
+
+  <div class="mail-shell">
+    <aside class="mail-side">
+      <button class="mail-compose">✏️ Compose</button>
+      <nav class="mail-nav">
+        <a class="active">📥 Inbox <span class="badge">1</span></a>
+        <a>⭐ Starred</a>
+        <a>📤 Sent</a>
+        <a>📝 Drafts</a>
+        <a>🗑 Trash</a>
+      </nav>
+    </aside>
+
+    <main class="mail-main">
+      <div class="mail-toolbar">
+        <span class="mail-title">Inbox</span>
+        <span class="mail-count">1 unread</span>
+      </div>
+
+      <div class="mail-list" id="mail-list">
+        <article class="mail-item unread" id="phish-mail">
+          <div class="mail-avatar" style="background:#0078d4;">MS</div>
+          <div class="mail-meta">
+            <div class="mail-from">
+              <strong>Microsoft 365</strong>
+              <span class="mail-time">now</span>
+            </div>
+            <div class="mail-subject">Action required: your account will be suspended</div>
+            <div class="mail-preview">We detected unusual sign-in activity on your account…</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="mail-view" id="mail-view">
+        <div class="mail-view-head">
+          <div class="mail-avatar" style="background:#0078d4;">MS</div>
+          <div>
+            <div class="mail-view-from">
+              <strong>Microsoft 365</strong>
+              <span class="mail-view-email" id="sender-email">&lt;security@micros0ft-verify.com&gt;</span>
+            </div>
+            <div class="mail-view-to">to: you@company.co.za</div>
+          </div>
+          <div class="mail-view-time">Today, now</div>
+        </div>
+
+        <h1 class="mail-view-subject">Action required: your account will be suspended</h1>
+
+        <div class="mail-view-body">
+          <p>Dear valued customer,</p>
+
+          <p>
+            We detected <strong>unusual sign-in activity</strong> on your
+            Microsoft 365 account. To avoid suspension within <strong>24 hours</strong>,
+            you must verify your account immediately.
+          </p>
+
+          <p>
+            <a href="login/" class="phish-link" id="phish-link">
+              👉 Verify my account now
+            </a>
+          </p>
+
+          <p>
+            Failure to verify will result in <strong>permanent loss of access</strong>
+            to your email, files, and Teams chats.
+          </p>
+
+          <p class="mail-signoff">
+            Sincerely,<br>
+            The Microsoft 365 Security Team
+          </p>
+
+          <hr>
+
+          <p class="mail-disclaimer">
+            Microsoft Corporation, One Microsoft Way, Redmond, WA 98052
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
