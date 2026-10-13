@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session terminated</title>
+  <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body class="caught-body">
+
+  <div class="training-banner">
+    <span class="dot"></span>
+    TRAINING ENVIRONMENT — No real data is collected or stored
+  </div>
+
+  <div class="caught-shell">
+
+    <div class="caught-icon">💀</div>
+
+    <h1 class="caught-title">You've been phished.</h1>
+
+    <p class="caught-sub">
+      In a real attack, everything you just typed has already been sent to the
+      attacker. Your email address and password are now in their hands.
+    </p>
+
+    <div class="caught-timer">
+      <span>Time to fall:</span>
+      <strong id="caught-time">4.7 seconds</strong>
+    </div>
+
+    <div class="caught-compare">
+      <div class="caught-col bad">
+        <div class="caught-col-label">You visited:</div>
+        <code id="caught-fake-url">login.micros0ft-verify.com</code>
+        <div class="caught-col-note">
+          ❌ Lookalike domain. The "o" is actually a zero.
+        </div>
+      </div>
+
+      <div class="caught-col good">
+        <div class="caught-col-label">The real Microsoft login is:</div>
+        <code>login.microsoft.com</code>
+        <div class="caught-col-note">
+          ✅ Only ever sign in on the exact official domain.
+        </div>
+      </div>
+    </div>
+
+    <div class="caught-what-now">
+      <h2>What you should have done</h2>
+      <ol>
+        <li>
+          <strong>Check the URL before typing anything.</strong>
+          Look for typos, extra words, or odd subdomains like
+          <code>micros0ft-verify.com</code>.
+        </li>
+        <li>
+          <strong>Never click "urgent" links in emails.</strong>
+          Type the official site address yourself, or use a bookmark.
+        </li>
+        <li>
+          <strong>Turn on MFA.</strong>
+          Even if your password leaks, MFA stops the attacker cold.
+        </li>
+        <li>
+          <strong>Use a password manager.</strong>
+          It won't auto-fill on a lookalike domain — that's your early warning.
+        </li>
+        <li>
+          <strong>Report it.</strong>
+          Tell your IT team immediately. Speed limits the damage.
+        </li>
+      </ol>
+    </div>
+
+    <div class="caught-actions">
+      <a href="../" class="caught-btn ghost">← Try again</a>
+      <a href="../../breach/" class="caught-btn danger">
+        See what happens next →
+      </a>
+    </div>
+
+    <p class="caught-note">
+      ⚠️ This was a training simulation. Nothing you typed was stored, sent,
+      or logged.
+    </p>
+
+  </div>
+
+  <script src="../../js/phish.js"></script>
+</body>
+</html>
