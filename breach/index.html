@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unknown // Terminal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/breach.css">
+</head>
+<body class="breach-body">
+
+  <div class="breach-shell">
+
+    <div id="breach-terminal" class="breach-terminal">
+      <div class="term-line">$ ssh root@target-db.internal</div>
+      <div class="term-line">Connected. Bypassing authentication layer…</div>
+      <div class="term-line">> enumerating databases…</div>
+      <div class="term-line">> found: <span class="hl">users</span></div>
+      <div class="term-line">> dumping table: <span class="hl">users</span></div>
+      <div class="term-line dim">- - - - - - - - - - - - - - - - - - - -</div>
+      <div class="term-line ok">✓ 5 records extracted</div>
+      <div class="term-line dim">rendering…</div>
+    </div>
+
+    <div id="breach-console" class="breach-console hidden">
+
+      <header class="breach-head">
+        <div class="breach-head-left">
+          <span class="skull">💀</span>
+          <div>
+            <strong>ciphercore_db_dump.sql</strong>
+            <small>Extracted via SQL injection — training simulation</small>
+          </div>
+        </div>
+        <div class="breach-head-right">
+          <span class="pill danger">UNENCRYPTED</span>
+          <span class="pill">5 accounts</span>
+        </div>
+      </header>
+
+      <div class="breach-warning">
+        ⚠️ This page is a training demonstration. These are fictional accounts.
+        Nothing here is real, stored, or transmitted.
+      </div>
+
+      <div class="breach-table" id="breach-table">
+        <!-- Rows injected by JS -->
+      </div>
+
+      <div class="breach-footer">
+        <p>
+          In a real breach, an attacker walks away with every username, email
+          and password in plain text. Most of them fall in seconds with the
+          right tooling.
+        </p>
+        <p class="dim">
+          CipherCore Security — this is why we run awareness training.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="../js/breach.js"></script>
+</body>
+</html>
