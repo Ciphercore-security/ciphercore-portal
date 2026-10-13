@@ -1,5 +1,5 @@
 /* =========================================================
-   CipherCore Learner Portal — Stylesheet
+   CipherCore Learner Portal — Full Stylesheet
    ========================================================= */
 
 :root {
@@ -396,9 +396,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================
-   PHISHING SIMULATION — Email, Fake Login, Reveal
+   PHISHING SIMULATION
    ========================================================= */
-
 .phish-body {
   background: #0a0e0d;
   color: var(--text);
@@ -564,7 +563,6 @@ a { color: inherit; text-decoration: none; }
   border-top: 1px solid #182320;
   margin: 20px 0;
 }
-
 .fake-urlbar {
   display: flex;
   align-items: center;
@@ -600,7 +598,6 @@ a { color: inherit; text-decoration: none; }
   font-family: ui-monospace, monospace;
   color: #e6ede9;
 }
-
 .ms-login-body {
   background: #ffffff;
   min-height: 100vh;
@@ -713,7 +710,6 @@ a { color: inherit; text-decoration: none; }
 }
 .ms-links a { color: #666; cursor: pointer; }
 .ms-links a:hover { text-decoration: underline; }
-
 .caught-body {
   background:
     radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.15), transparent 55%),
@@ -882,6 +878,7 @@ a { color: inherit; text-decoration: none; }
   margin-top: 20px;
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .portal-shell { grid-template-columns: 1fr; }
   .sidebar {
