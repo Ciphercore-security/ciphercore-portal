@@ -1,241 +1,35 @@
-/* =========================================================
-   CipherCore — Breach Console (attacker view)
-   Styled to match the Learner Portal
-   ========================================================= */
-
-.breach-body {
-  background:
-    radial-gradient(circle at 20% 0%, rgba(74, 222, 128, 0.05), transparent 55%),
-    radial-gradient(circle at 80% 100%, rgba(239, 68, 68, 0.04), transparent 55%),
-    #0a0e0d;
-  color: #e6ede9;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.breach-shell {
-  min-height: 100vh;
-  padding: 40px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ---------- Terminal intro ---------- */
-.breach-terminal {
-  max-width: 700px;
-  width: 100%;
-  background: #151b18;
-  border: 1px solid #1f2a25;
-  border-radius: 12px;
-  padding: 28px 24px;
-  font-family: ui-monospace, 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 13.5px;
-  line-height: 2;
-  color: #4ade80;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-.term-line {
-  opacity: 0;
-  animation: fadeIn 0.25s forwards;
-}
-.term-line:nth-child(1) { animation-delay: 0.1s; }
-.term-line:nth-child(2) { animation-delay: 0.7s; }
-.term-line:nth-child(3) { animation-delay: 1.3s; }
-.term-line:nth-child(4) { animation-delay: 1.7s; }
-.term-line:nth-child(5) { animation-delay: 2.1s; }
-.term-line:nth-child(6) { animation-delay: 2.4s; }
-.term-line:nth-child(7) { animation-delay: 2.6s; }
-.term-line:nth-child(8) { animation-delay: 2.9s; }
-
-.term-line .hl { color: #4ade80; font-weight: 700; }
-.term-line.dim { color: #5f6d66; }
-.term-line.ok { color: #4ade80; font-weight: 700; }
-
-@keyframes fadeIn { to { opacity: 1; } }
-
-/* ---------- Console ---------- */
-.breach-console {
-  width: 100%;
-  max-width: 1100px;
-  background: #151b18;
-  border: 1px solid #1f2a25;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-  transition: opacity 0.4s ease;
-}
-.breach-console.hidden { display: none; }
-
-.breach-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid #1f2a25;
-  background: #111614;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.breach-head-left { display: flex; align-items: center; gap: 14px; }
-.skull {
-  font-size: 26px;
-  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.55));
-}
-.breach-head strong {
-  display: block;
-  font-size: 15px;
-  color: #e6ede9;
-  font-family: ui-monospace, monospace;
-}
-.breach-head small { font-size: 12px; color: #8b9a92; }
-.breach-head-right { display: flex; gap: 8px; align-items: center; }
-
-.pill {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid #1f2a25;
-  color: #4ade80;
+/* ---------- Hidden password state ---------- */
+.breach-pw.hidden-pw {
+  color: #5f6d66;
   background: #0e1311;
+  border-color: #1f2a25;
+  letter-spacing: 0.15em;
+  font-weight: 400;
 }
-.pill.danger {
+
+.breach-pw.revealed-pw {
   color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.4);
   background: rgba(239, 68, 68, 0.08);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+  border-color: rgba(239, 68, 68, 0.35);
+  animation: revealFlash 0.6s ease;
 }
 
-.breach-warning {
-  padding: 10px 24px;
-  font-size: 12.5px;
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.06);
-  border-bottom: 1px solid #1f2a25;
+@keyframes revealFlash {
+  0%   { background: rgba(239, 68, 68, 0.6); color: #fff; }
+  100% { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
 }
 
-/* ---------- Table ---------- */
-.breach-table { padding: 0; }
-
-.breach-col-head {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr 1fr auto;
-  gap: 16px;
-  padding: 12px 24px;
-  border-bottom: 1px solid #1f2a25;
-  background: #111614;
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #5f6d66;
-  font-weight: 700;
-}
-
-.breach-row {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 24px;
-  border-bottom: 1px solid #182320;
-  font-size: 13.5px;
-  transition: background 0.15s;
-}
-.breach-row:hover { background: #111614; }
-.breach-row:last-child { border-bottom: none; }
-
-.breach-cell {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.breach-cell.label {
-  color: #5f6d66;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.breach-name { color: #e6ede9; font-weight: 600; }
-.breach-email { color: #8b9a92; font-size: 12.5px; font-family: ui-monospace, monospace; }
-
-.breach-pw {
-  color: #ef4444;
-  font-weight: 700;
-  background: rgba(239, 68, 68, 0.08);
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  display: inline-block;
-  font-size: 12.5px;
-  font-family: ui-monospace, monospace;
-}
-
-.breach-crack {
-  background: #151b18;
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 7px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.breach-crack:hover:not(:disabled) {
-  background: #ef4444;
-  color: #fff;
-  border-color: #ef4444;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
-}
-.breach-crack:disabled {
-  cursor: default;
+/* ---------- Verdict colours ---------- */
+.breach-result .verdict.running { color: #fbbf24; }
+.breach-result .verdict.cracked { color: #ef4444; }
+.breach-result .verdict.resisted {
   color: #4ade80;
-  border-color: rgba(74, 222, 128, 0.35);
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+}
+
+/* ---------- "Resisted" button state ---------- */
+.breach-crack.resisted-btn {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.4);
   background: rgba(74, 222, 128, 0.06);
-}
-
-.breach-result {
-  grid-column: 1 / -1;
-  font-size: 12.5px;
-  color: #8b9a92;
-  padding: 4px 0 0;
-}
-.breach-result .verdict {
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
-  color: #ef4444;
-  margin-bottom: 4px;
-}
-.breach-result .detail { color: #5f6d66; }
-
-/* ---------- Footer ---------- */
-.breach-footer {
-  padding: 20px 24px;
-  border-top: 1px solid #1f2a25;
-  background: #111614;
-  font-size: 13px;
-  color: #8b9a92;
-  line-height: 1.7;
-}
-.breach-footer .dim { color: #5f6d66; margin-top: 8px; font-size: 12px; }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 800px) {
-  .breach-row, .breach-col-head {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-  .breach-col-head { display: none; }
-  .breach-row { padding: 16px 20px; }
 }
